@@ -13,6 +13,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@fortawesome/fontawesome-free/css/all.css'
 import { aliases, fa } from 'vuetify/iconsets/fa'
+import colors from 'vuetify/lib/util/colors'
 
 const vuetify = createVuetify({
     components: {
@@ -26,6 +27,21 @@ const vuetify = createVuetify({
             fa,
         },
     },
+    theme: {
+        themes: {
+          light: {
+            dark: false,
+            colors: {
+              primary: '#413b6b', // #413b6b
+              secondary: '#5c65c0', // #FFCDD2
+              error: '#E44D3A',
+              info: '#6f95ff',
+              warning: '#fec107',
+              success: '#00c292'
+            }
+          },
+        },
+      },
   })
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
