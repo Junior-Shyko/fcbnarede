@@ -160,51 +160,71 @@
           </v-col>
 
           <v-col cols="12" sm="6">
-           <div class="border-t-4 border-t-[#1c0b2b] rounded-md">
-            <v-card class="mx-auto mb-5">
-              <template v-slot:prepend>
-                <v-avatar
-                  color="grey-darken-3"
-                  image="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                ></v-avatar>
-              </template>
-              <template v-slot:title>
-                <v-textarea
-                  name="input-7-1"
-                  variant="filled"
-                  label="Digite o que está pensando"
-                  auto-grow
-                  clearable
-                  clear-icon="fas fa-circle-xmark"
-                  rows="3"
-                  row-height="20"
-                ></v-textarea>
-              </template>
+            <div class="border-t-4 border-t-[#1c0b2b] rounded-md">
+              <v-card class="mx-auto mb-5">
+                <template v-slot:prepend>
+                  <v-avatar
+                    color="grey-darken-3"
+                    image="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                  ></v-avatar>
+                </template>
+                <template v-slot:title>
+                  <v-textarea
+                    name="input-7-1"
+                    variant="filled"
+                    label="Digite o que está pensando"
+                    auto-grow
+                    clearable
+                    clear-icon="fas fa-circle-xmark"
+                    rows="3"
+                    row-height="20"
+                  ></v-textarea>
+                </template>
 
-              <v-card-text> 
-                <v-row justify="space-between">
-                  <v-col cols="6">
-                    <v-file-input clearable label="Anexar imagem" variant="outlined"></v-file-input>
-                  </v-col>
-                  <v-col cols="6" class="d-flex justify-end align-self-center">
-                    <v-btn color="#413b6b" class="text-white">
-                      Publicar
-                    </v-btn>
-                  </v-col>
-                 
-                </v-row>
-              </v-card-text>
-            </v-card>
-           </div>
+                <v-card-text>
+                  <v-row justify="space-between">
+                    <v-col cols="6">
+                      <v-file-input
+                        clearable
+                        label="Anexar imagem"
+                        variant="outlined"
+                      ></v-file-input>
+                    </v-col>
+                    <v-col
+                      cols="6"
+                      class="d-flex justify-end align-self-center"
+                    >
+                      <v-btn color="#413b6b" class="text-white">
+                        Publicar
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </div>
             <v-sheet min-height="70vh" rounded="lg">
               <!--  -->
             </v-sheet>
           </v-col>
 
-          <v-col cols="12" sm="3">
-            <v-sheet rounded="lg" min-height="268">
-              <!--  -->
-            </v-sheet>
+          <v-col cols="12" sm="3" class="justify-center">
+            <v-card class="mx-auto">
+             <v-row justify="center">
+              <v-img
+                src="/logo/logo-fcb.png"
+                class="m-5"
+                height="100px"
+                width="100px"
+              ></v-img>
+             </v-row>
+             <v-divider class="mx-4 mb-1"></v-divider>
+
+    <v-card-title>Mural de Avisos</v-card-title>
+    <v-list :items="items"></v-list>
+    <div class="d-flex justify-center">
+      <v-btn variant="text" color="#5c65c0" class="mb-3">Ver todos</v-btn>
+    </div>
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -216,6 +236,20 @@
 export default {
   data: () => ({
     links: ["Dashboard", "Messages", "Profile", "Updates"],
+    items: [
+        {
+          title: 'Aviso 01',
+          value: 1,
+        },
+        {
+          title: 'Aviso 02',
+          value: 2,
+        },
+        {
+          title: 'Aviso 03',
+          value: 3,
+        },
+      ],
   }),
 };
 </script>
