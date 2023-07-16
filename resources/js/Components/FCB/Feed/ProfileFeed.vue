@@ -1,3 +1,7 @@
+<script setup>
+import { Link, router, useForm } from '@inertiajs/vue3';
+</script>
+
 <template>
   <v-sheet rounded="lg" min-height="268">
     <v-list>
