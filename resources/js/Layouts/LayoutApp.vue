@@ -1,12 +1,12 @@
 <script setup>
-import { Head, Link, router } from "@inertiajs/vue3";
 import NavBarAppVue from "@/Components/NavBarApp.vue";
 import SideLeft from "@/Components/FCB/System/SideLeft.vue";
+import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
     <div>
-    <Head :title="title" />
+    <Head title="Editar Usuario" />
     <div class="min-h-screen bg-gray-100">
         <NavBarAppVue />
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

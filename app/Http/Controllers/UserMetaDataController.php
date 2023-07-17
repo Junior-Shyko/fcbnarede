@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
+use Inertia\Inertia;
+use App\Models\UserMetaData;
 use App\Http\Requests\StoreUserMetaDataRequest;
 use App\Http\Requests\UpdateUserMetaDataRequest;
-use App\Models\UserMetaData;
 
 class UserMetaDataController extends Controller
 {
@@ -29,7 +32,18 @@ class UserMetaDataController extends Controller
      */
     public function store(StoreUserMetaDataRequest $request)
     {
-        //
+           // Retrieve the validated input data...
+        try {
+            dump($request->all());
+            $birth = Carbon::parse($request['birth_date'])->format('Y-m-d');
+            $request['birth_date'] = $birth;
+            $request['id'] = 2;
+            UserMetaData::updateOrCreate($request->all());
+
+            return response()->json(['message' => 'Dados Inseridos']);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -43,9 +57,13 @@ class UserMetaDataController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserMetaData $userMetaData)
+    public function edit($id)
     {
-        //
+        $user = User::find($id);
+        $metaData = $user->userMeta()->get();
+        return Inertia::render('Profile/Metadata/Edit', [
+            'user' => $metaData
+        ]);
     }
 
     /**
