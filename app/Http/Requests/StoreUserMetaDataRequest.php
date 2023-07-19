@@ -23,12 +23,28 @@ class StoreUserMetaDataRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'nick' => 'required|unique:user_meta_data|max:30',
-            'birth_date' => 'required',
-            'sex' => 'required',
-            'user_id' => 'required',
-        ];
+        // dump($this->request->parameters);
+        switch ($this->method()) {
+            case 'PATCH': {
+                return [
+                    'nick' => 'required|max:30',
+                    'birth_date' => 'required|date',
+                    'sex' => 'required'
+                ];
+            }
+            case 'POST': {
+                return [
+                    'nick' => 'required|unique:user_meta_data|max:30',
+                    'birth_date' => 'required',
+                    'sex' => 'required'
+                ];
+            }
+            
+            default:
+                # code...
+                break;
+        }
+        
     }
 
     public function failedValidation(Validator $validator)
@@ -36,6 +52,10 @@ class StoreUserMetaDataRequest extends FormRequest
     {
 
         throw new HttpResponseException(response()->json([
+
+            'success'   => false,
+
+            'message'   => 'Validation errors',
 
             'data'      => $validator->errors()
 
@@ -53,8 +73,8 @@ class StoreUserMetaDataRequest extends FormRequest
         return [
             'nick.required' => 'Nick é obrigatório',
             'birth_date.required' => 'Data de nascimento é obrigatório',
-            'sex.required' => 'Gênero é obrigatório',
-            'user_id.required' => 'Usuário é obrigatório',
+            'sex.required' => 'Gênero é obrigatório'
+          
         ];
     }
 }

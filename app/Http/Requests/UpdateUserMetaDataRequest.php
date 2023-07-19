@@ -11,7 +11,7 @@ class UpdateUserMetaDataRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateUserMetaDataRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nick' => 'required|unique:user_meta_data|max:30',
+            'birth_date' => 'required',
+            'sex' => 'required'
         ];
     }
 }

@@ -34,7 +34,7 @@ class UserMetaDataController extends Controller
     {
            // Retrieve the validated input data...
         try {
-            dump($request->all());
+          
             $birth = Carbon::parse($request['birth_date'])->format('Y-m-d');
             $request['birth_date'] = $birth;
             $request['id'] = 2;
@@ -42,7 +42,7 @@ class UserMetaDataController extends Controller
 
             return response()->json(['message' => 'Dados Inseridos']);
         } catch (\Throwable $th) {
-            throw $th;
+            return response()->json(['error' => $th->getMessage()]);
         }
     }
 
@@ -60,18 +60,28 @@ class UserMetaDataController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $metaData = $user->userMeta()->get();
+        $metaData = $user->userMeta();
         return Inertia::render('Profile/Metadata/Edit', [
-            'user' => $metaData
+            'metadata' => $metaData->get()[0],
+            'parent' => $metaData->getParent()
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserMetaDataRequest $request, UserMetaData $userMetaData)
+    public function update(StoreUserMetaDataRequest $request, $id)
     {
-        //
+       try {
+        $userMeta = UserMetaData::where('user_id', $id)->first();
+        $birth = Carbon::parse($request['birth_date'])->format('Y-m-d');
+        $request['birth_date'] = $birth;
+        
+        $userMeta->update($request->all());
+       } catch (\Exception $th) {
+        return response()->json(['error' => $th->getMessage()]);
+       }
+
     }
 
     /**
