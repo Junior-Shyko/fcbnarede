@@ -42,7 +42,7 @@ import { Link, router } from '@inertiajs/vue3';
   
         <v-list-item value="access">
           <template v-slot:prepend>
-            <v-btn variant="text" :href="route('editar-usuario' , 1)">
+            <v-btn variant="text" :href="route('editar-usuario' , $page.props.auth.user.id)">
             <v-list-item-action start>
                   <v-list-item-title>
                   Editar Dados 
