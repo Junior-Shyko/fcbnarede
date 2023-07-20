@@ -1,5 +1,5 @@
 <script setup>
-import { Link, router, useForm } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 </script>
 
 <template>
@@ -42,13 +42,15 @@ import { Link, router, useForm } from '@inertiajs/vue3';
   
         <v-list-item value="access">
           <template v-slot:prepend>
+            <v-btn variant="text" :href="route('editar-usuario' , $page.props.auth.user.id)">
             <v-list-item-action start>
-              <v-list-item-title>Ultimo Acesso: </v-list-item-title>
+                  <v-list-item-title>
+                  Editar Dados 
+                </v-list-item-title>
             </v-list-item-action>
+          </v-btn>
           </template>
-          <v-list-item-action end>
-            <v-chip color="primary"> 15/07/2023 </v-chip>
-          </v-list-item-action>
+          
         </v-list-item>
   
         <v-list-item value="name_gc">
