@@ -16,4 +16,29 @@ class PostRepository {
         ->get();
     }
 
+    /**
+     * Incrementa o valor atual de like em um determinado post
+     *
+     * @param Post $post
+     * @return void
+     */
+    static public function addLikePost($postId): void
+    {
+        $post = Post::find($postId);
+        $post->like += 1;
+        $post->save();
+    }
+
+        /**
+     * Incrementa o valor atual de like em um determinado post
+     *
+     * @param Post $post
+     * @return void
+     */
+    static public function removeLikePost($postId): void
+    {
+        $post = Post::find($postId);
+        $post->like -= 1;
+        $post->save();
+    }
 }
