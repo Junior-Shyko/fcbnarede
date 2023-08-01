@@ -9,6 +9,7 @@ use App\Models\UserMetaData;
 use App\Http\Requests\StoreUserMetaDataRequest;
 use App\Http\Requests\UpdateUserMetaDataRequest;
 
+
 class UserMetaDataController extends Controller
 {
     /**
@@ -16,7 +17,7 @@ class UserMetaDataController extends Controller
      */
     public function index()
     {
-        //
+       //
     }
 
     /**
