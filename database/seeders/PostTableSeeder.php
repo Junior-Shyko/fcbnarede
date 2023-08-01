@@ -20,7 +20,7 @@ class PostTableSeeder extends Seeder
             if( $i % 2 == 0 ) {
                 $publish = true;
             }
-            DB::table('post')->insert([
+            DB::table('posts')->insert([
                 'description' => $faker->text(),
                 'publish' => $publish,
                 'like' => $faker->randomNumber(4, true),
