@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
+use App\Repository\PostRepository;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
-use App\Models\Post;
-use App\Repository\PostRepository;
 
 class PostController extends Controller
 {
@@ -14,8 +15,20 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = new PostRepository;
-        return $post->postAndUser();
+        // $post = new PostRepository;
+        // return $post->postAndUser();
+
+        //todos os posts de cada usuario
+        // $user = User::limit(5)->with('posts')->get();
+
+        //todos os likes do usuario
+        // $likes = User::limit(5)->with('likes')->get();
+        // // dump($user);
+        // return response()->json($likes);
+
+        $post = Post::with(['user', 'likes'])->get();
+        return response()->json($post);
+
     }
 
     /**
