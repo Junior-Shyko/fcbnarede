@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PhoneController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +30,10 @@ Route::prefix('post')->group(function () {
     Route::get('todos', [PostController::class, 'index'])->name('todos');
 });
 
-
 Route::prefix('like')->group(function () {
     Route::post('add', [LikeController::class, 'store'])->name('add');
     Route::delete('unlike', [LikeController::class, 'destroy'])->name('unlike');
     Route::get('all/post/{id}', [LikeController::class, 'show'])->name('show');
 });
+
+Route::post('phone', [PhoneController::class, 'store'])->name('phone');
