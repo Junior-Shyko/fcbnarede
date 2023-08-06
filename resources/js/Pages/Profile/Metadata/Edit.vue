@@ -1,14 +1,14 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineComponent } from "vue";
 import { Link, router, useForm } from '@inertiajs/vue3';
 import LayoutApp from "@/Layouts/LayoutApp.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import MessageText from "@/Components/MessageText.vue";
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css'
 import moment from 'moment';
-
 import axios from 'axios';
 
 const props = defineProps({
@@ -41,7 +41,8 @@ const updatePassword = () => {
     form.patch('/user/update-user/' + props.parent.id,{
         preserveScroll: true,
         onSuccess: (e) => {
-            alert('Alterado com sucesso')
+            //alert('Alterado com sucesso')
+            toast('Sucesso', 'Seus dados foram atualizados');
         },
         onError: (e) => {
             console.log({e})
@@ -69,11 +70,26 @@ const consultaCep = (cep) => {
     // always executed
   });
 }
+
+const toast = (titToast, descToast) => {
+  createToast({
+    title: titToast,
+    description: descToast
+  },
+  {
+    showIcon: 'true',
+    position: 'top-center',
+    type: 'default',
+    transition: 'zoom',
+  })
+}
+
 </script>
 
 <template>
   <LayoutApp>
     <v-sheet color="#EEEEEE" rounded class="p-2">
+      <button @click="toast('Sucesso', 'Seus dados foram atualizados')">Toast it!</button>
         <form @submit.prevent="updatePassword">
       <v-row>
         <v-col cols="12" xs="12" sm="6" md="6">

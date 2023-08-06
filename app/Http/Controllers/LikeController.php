@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Like;
 use App\Models\Post;
+use App\Models\User;
 use App\Repository\PostRepository;
 use App\Http\Requests\StoreLikeRequest;
 use App\Http\Requests\UpdateLikeRequest;
@@ -54,9 +55,18 @@ class LikeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Like $like)
+    public function show($idPost)
     {
-        //
+        // $post = Post::find($idPost)->likes;
+       
+        // $user = User::limit(5)->with('posts')->get();
+        // dump($user);
+        $like = Like::where('post_id', $idPost);
+        return response()->json($like->with('user')->get());
+
+    //    dump($post->user()->get());
+    //     // $post->with('likes');
+    //     dump($post->with('likes')->get());
     }
 
     /**
