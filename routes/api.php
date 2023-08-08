@@ -36,4 +36,9 @@ Route::prefix('like')->group(function () {
     Route::get('all/post/{id}', [LikeController::class, 'show'])->name('show');
 });
 
-Route::post('phone', [PhoneController::class, 'store'])->name('phone');
+Route::prefix('phone')->group(function () {
+    Route::post('store', [PhoneController::class, 'store'])->name('phone-store');
+    Route::get('user/{id}', [PhoneController::class, 'show'])->name('phone-user');
+    Route::delete('delete/{id}', [PhoneController::class, 'destroy'])->name('phone-delete');
+});
+

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive  } from "vue";
+import { ref, reactive } from "vue";
 import { Link, router, useForm } from '@inertiajs/vue3';
 import LayoutApp from "@/Layouts/LayoutApp.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -10,6 +10,7 @@ import { createToast } from 'mosha-vue-toastify';
 import 'mosha-vue-toastify/dist/style.css'
 import moment from 'moment';
 import api from "@/Services/server";
+import ListPhone from "./ListPhone.vue";
 
 const props = defineProps({
   metadata: Object,
@@ -82,31 +83,74 @@ const toast = (titToast, descToast, typeToast) => {
       position: 'top-center',
       type: typeToast,
       transition: 'zoom',
-  })
+    })
 }
 const state = reactive({
-  maskPhone: ""
+  maskPhone: "",
+  phones: [],
+  dialogModel: false,
+  dialogModelStore: false,
+  idPhone: ""
 })
-function savePhone(value){
-  console.log(state)
-  // emit('savePhone', value);  
-  // console.log(this.maskPhone)
-      const dataPhone = {number: state.maskPhone, user_id: props.parent.id}
-      api.post('api/phone', dataPhone)
-      .then(res => {
-        console.log(res.data)
-        
-        if(res.data.success == false) {
-          toast('Error', 'Ocorreu um erro', 'danger');
-          return;
-        }
-        toast('Sucesso', 'Seus dados foram atualizados', 'default');
-        state.maskPhone = '';
-      })
-      .catch(err => {        
-        console.log({err})
-      })
-    }
+
+const showDialogEditPhone = (number) => {
+ state.dialogModelStore = true;
+ state.maskPhone = number;
+}
+
+function savePhone(value) {
+  //verificando se tem número
+  if (state.maskPhone == "") {
+    toast('Error', 'O número é obrigatório', 'danger');
+    return;
+  }
+  const dataPhone = { number: state.maskPhone, user_id: props.parent.id }
+  api.post('api/phone/store', dataPhone)
+    .then(res => {
+      console.log(res.data)
+
+      if (res.data.success == false) {
+        toast('Error', 'Ocorreu um erro', 'danger');
+        return;
+      }
+      toast('Sucesso', 'Seus dados foram atualizados', 'default');
+      state.maskPhone = '';
+      getPhone();
+    })
+    .catch(err => {
+      console.log({ err })
+    })
+}
+
+const getPhone = () => {
+  api.get('api/phone/user/' + props.parent.id)
+    .then(res => {
+      console.log(res)
+      state.phones = res.data
+    })
+    .catch(err => {
+      console.log({ err })
+    });
+}
+//INICIANDO COM OS NÚMEROS EXISTENTES
+getPhone();
+
+const showDialogPhone = (number) => {
+  state.dialogModel = true
+  state.idPhone = number
+}
+
+const removePhone = () => {
+  api.delete('api/phone/delete/' + state.idPhone)
+    .then(res => {
+      getPhone();
+      state.dialogModel = false
+      toast('Sucesso', 'Número de telefone excluído');
+    })
+    .cache(err => {
+      toast('Erro', 'Ocorreu um erro inesperado');
+    })
+}
 </script>
 
 <template>
@@ -227,28 +271,18 @@ function savePhone(value){
     <v-row>
       <v-divider></v-divider>
       <v-col cols="12" xs="12" sm="6" md="6">
-
-
-        <v-dialog transition="dialog-top-transition" width="100%">
-          <template v-slot:activator="{ props }">
-            <v-btn class="m-2" v-bind="props">
-              <v-icon icon="far fa-plus" />
-              <label class="ml-1"> Adicionar telefone </label>
-            </v-btn>
-          </template>
+        <v-btn class="m-2" v-bind="props">
+          <v-icon icon="far fa-plus" />
+          <label class="ml-1" @click="state.dialogModelStore = true"> Adicionar telefone </label>
+        </v-btn>
+        <v-dialog  v-model="state.dialogModelStore" transition="dialog-top-transition">
           <template v-slot:default="{ isActive }">
             <v-card>
               <v-toolbar color="primary" title="Cadastrar"></v-toolbar>
               <v-card-text>
                 <v-col cols="12" xs="12" sm="12" md="12">
-                  <v-text-field 
-                    label="Número do telefone"
-                    required 
-                    variant="outlined"
-                    prepend-icon="fas fa-phone"
-                    v-mask-phone.br
-                    v-model="state.maskPhone"
-                  ></v-text-field>
+                  <v-text-field label="Número do telefone" required variant="outlined" prepend-icon="fas fa-phone"
+                    v-mask-phone.br v-model="state.maskPhone"></v-text-field>
                 </v-col>
 
               </v-card-text>
@@ -269,13 +303,39 @@ function savePhone(value){
             <svg class="h-6 w-6 stroke-sky-500 group-hover:slate-white" fill="none" viewBox="0 0 24 24"><!-- ... --></svg>
             <h3 class="text-slate-900 group-hover:text-slate-500 text-sm font-semibold">Telefone(s) de contato:</h3>
           </div>
-          <p class="text-slate-500 group-hover:text-slate-700 text-sm">
-            (87) 98765-0909
-          </p>
-          <p class="text-slate-500 group-hover:text-slate-700 text-sm">Create a new project from a variety of starting
-            templates.</p>
-        </a>
 
+          <v-list lines="one">
+            <v-list-item v-for="item in state.phones" :key="item.title" :title="item.number">
+              <template v-slot:append>
+                <v-row>
+                  <v-col cols="12" xs="12" sm="12" md="12">
+                    <v-btn 
+                      color="text-slate-900"
+                      icon="far fa-edit"
+                      variant="text"
+                      class="btn-phone-delete"
+                      @click="showDialogEditPhone(item.number)"
+                    ></v-btn>
+                    <v-btn color="red-lighten-2" icon="fas fa-trash" variant="text" class="btn-phone-delete"
+                      @click="showDialogPhone(item.id)"></v-btn>
+                  </v-col>
+                </v-row>
+
+              </template>
+            </v-list-item>
+          </v-list>
+        </a>
+        <v-dialog v-model="state.dialogModel" width="auto">
+          <v-card>
+            <v-card-text class="text-red-darken-3">
+              Deseja realmente excluir esse número?
+            </v-card-text>
+            <v-card-actions class="justify-between">
+              <v-btn color="primary" @click="state.dialogModel = false">Não</v-btn>
+              <v-btn color="primary" @click="removePhone">Sim</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-col>
     </v-row>
   </LayoutApp>
@@ -298,9 +358,15 @@ export default {
     dateTime(value) {
       return moment(value).format('L');
     },
-    
+
   },
 };
 </script>
 
-<style></style>
+<style>
+.btn-phone-delete {
+  font-size: 12px;
+  padding: 2px;
+  border-radius: 5px;
+}
+</style>

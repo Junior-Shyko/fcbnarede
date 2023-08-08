@@ -40,9 +40,14 @@ class PhoneController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Phone $phone)
+    public function show($idUser)
     {
-        //
+        try {
+            $phone = Phone::where('user_id', $idUser)->get();
+            return response()->json($phone);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Ocorreu um erro inesperado.'], 402);
+        }
     }
 
     /**
@@ -64,8 +69,15 @@ class PhoneController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Phone $phone)
+    public function destroy($id)
     {
-        //
+        try {
+            $phone = Phone::find($id);
+            $phone->delete();
+            return response()->json(['message' => 'success'],200);
+        } catch (\Throwable $th) {
+            
+            return response()->json(['message' => 'error'], 402);
+        }
     }
 }
