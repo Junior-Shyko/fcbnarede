@@ -40,5 +40,6 @@ Route::prefix('phone')->group(function () {
     Route::post('store', [PhoneController::class, 'store'])->name('phone-store');
     Route::get('user/{id}', [PhoneController::class, 'show'])->name('phone-user');
     Route::delete('delete/{id}', [PhoneController::class, 'destroy'])->name('phone-delete');
+    Route::patch('update', [PhoneController::class, 'update'])->name('phone-update');
 });
 

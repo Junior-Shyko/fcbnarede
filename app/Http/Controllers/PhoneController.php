@@ -61,9 +61,16 @@ class PhoneController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePhoneRequest $request, Phone $phone)
+    public function update(StorePhoneRequest $request)
     {
-        //
+       try {
+        $phone = Phone::find($request->id);
+        $phone->update(['number' => $request->number]);
+        return response()->json(['message' => 'Alterado com sucesso'] , 200);
+       } catch (\Throwable $th) {
+        return response()->json(['error' => 'Ocorreu um erro inesperado'] , 500);
+       }
+      
     }
 
     /**
