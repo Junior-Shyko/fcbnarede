@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserMetaDataController;
 
 /*
@@ -30,6 +31,9 @@ Route::prefix('user')->group(function () {
     Route::patch('update-user/{id}', [UserMetaDataController::class, 'update'])->name('update-user');
 });
 
+Route::prefix('post')->group(function () {
+    Route::get('/{id}', [PostController::class, 'show'])->name('post');
+});
 
 Route::middleware([
     'auth:sanctum',

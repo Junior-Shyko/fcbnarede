@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use Inertia\Inertia;
 use App\Repository\PostRepository;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
@@ -26,8 +27,8 @@ class PostController extends Controller
         // // dump($user);
         // return response()->json($likes);
 
-        $post = Post::with(['user', 'likes'])->get();
-        return response()->json($post);
+        $post = Post::with(['user', 'likes'])->limit(5)->get();
+        return response()->json($post);     
 
     }
 
@@ -50,9 +51,13 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show($idPost)
     {
-        //
+        $post = Post::find($idPost);
+
+        return Inertia::render('Post/Post', [
+            'post' => $post
+        ]);
     }
 
     /**
