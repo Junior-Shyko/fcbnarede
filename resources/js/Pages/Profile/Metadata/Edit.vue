@@ -9,7 +9,6 @@ import MessageText from "@/Components/MessageText.vue";
 import { createToast } from 'mosha-vue-toastify';
 import 'mosha-vue-toastify/dist/style.css'
 import moment from 'moment';
-import api from "@/Services/server";
 import CreateAndEdit from "@/Components/FCB/Phone/CreateAndEdit.vue";
 
 const props = defineProps({
