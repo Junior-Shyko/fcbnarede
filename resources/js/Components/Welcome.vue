@@ -4,18 +4,21 @@ import { Link, router } from "@inertiajs/vue3";
 import api from "@/Services/server";
 
 const state = reactive({
-  posts: []
+  posts: [],
+  isLike: ''
 })
 
 
 const showReaction = ref(false)
-
+const isLike = ref(false);
 
 const getPosts = () => {
   api.get('api/post/todos')
     .then(res => {
-      console.log(res)
+      // console.log(res)
       state.posts = res.data
+     
+      
     })
     .catch(err => {
       console.log(err)
@@ -27,6 +30,47 @@ getPosts();
 state.posts.forEach((s) => {
       s.show = false
 })
+
+const likePost = (user, post) => {
+console.log(user, post)
+  const postData = {user_id: user, post_id: post}
+  api.post('api/like/add', postData)
+  .then(res => {
+    console.log(res.status)
+    if(res.status == 202){
+      console.log('Remover o like')
+      isLike = true;
+    }
+    getPosts();
+  })
+  .catch(err => {
+    console.log(err.response.data.error)
+   
+  })
+}
+
+const myLike = (postId, userId) => {
+  //userId é o usuario de quem está logado
+  console.log(postId , userId)
+  api.get('api/like/all/post/' + postId)
+  .then(res => {
+    // console.log({res})
+    res.data.forEach(element => {
+      // console.log(element)
+      if(element.user_id == userId  && element.post_id == postId)
+      {
+        console.log('Curtiu esse post: ' + element.post_id)
+        isLike.value = true;
+        state.isLike = 'Você curtiu';
+        return;
+      }
+    });
+  })
+  .catch(err => {
+
+  })
+}
+
 
 </script>
 
@@ -57,6 +101,7 @@ state.posts.forEach((s) => {
           </v-card>
         </div>
         <v-card class="mt-3" v-for="(item, index) in state.posts">
+          {{  myLike(item.id, $page.props.auth.user.id) }}
           <v-row :key="index">
             <v-col cols="12" class="d-flex ml-2 mt-2">
               <v-avatar color="info">
@@ -66,32 +111,35 @@ state.posts.forEach((s) => {
                 :subtitle="`${'Publicado em: ' + item.created_at}`"></v-list-item>
             </v-col>
             <v-col cols="12">
-              <Link :href="route('post' , item.id)">
+             
               <v-card class="mx-auto">
+                <Link :href="route('post' , item.id)">
                 <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px" cover></v-img>
                 <p class="m-5">
                   {{ item.description }}
                 </p>
+              </Link>
                 <v-card-actions>
-                  <!-- <v-row justify="space-between">
+                  <v-row justify="space-between">
+                    <v-btn class="m-2">
+                      <v-icon icon="far fa-thumbs-up" @click="likePost($page.props.auth.user.id, item.id )" />
+                      <label class="ml-1 mt-1"> {{ item.like }}</label>
+                    </v-btn>
                     <v-btn class="m-2" @click="showReaction = !showReaction">
                       <v-icon icon="far fa-heart" />
                       <label class="ml-1 mt-1"> {{ item.heart }} </label>
                     </v-btn>
-                    <v-btn class="m-2">
-                      <v-icon icon="far fa-thumbs-up" @click="showReaction = !showReaction" />
-                      <label class="ml-1 mt-1"> {{ item.like }} </label>
-                    </v-btn>
+                    
                     <v-btn class="m-2" title="Compartilhar">
                       <v-icon icon="fas fa-share-nodes" /> <label class="mt-1">  </label>
                     </v-btn>
-                  </v-row> -->
+                  </v-row>
                 
 
                   <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
-            </Link>
+           
             </v-col>
           </v-row>
         </v-card>
@@ -117,21 +165,7 @@ export default {
         title: "Aviso 03",
         value: 3,
       },
-    ],
-    niver: [
-      {
-        title: "10 - João Pedro",
-        value: 1,
-      },
-      {
-        title: "16 - William Correa",
-        value: 2,
-      },
-      {
-        title: "29 - Maria Clara",
-        value: 3,
-      },
-    ],
+    ]
   }),
 };
 </script>

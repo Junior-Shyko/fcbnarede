@@ -6,6 +6,7 @@ use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
 use App\Repository\PostRepository;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreLikeRequest;
 use App\Http\Requests\UpdateLikeRequest;
 
@@ -46,7 +47,7 @@ class LikeController extends Controller
                 PostRepository::addLikePost($request['post_id']);
                 return response()->json(['message' => 'success'], 200);
             }
-            return response()->json(['error' => 'Já existe um like seu para esse post: ' ], 400);
+            return response()->json(['error' => 'Já existe um like seu para esse post: ' ], 202);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Ocorreu um erro inesperado: ' ], 400);
         }
@@ -100,5 +101,12 @@ class LikeController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Ocorreu um erro inesperado: ' . $e->getMessage()], 400);
         }
+    }
+
+    public function myLike($idPost)
+    {
+        $userId = 31;
+        $post = PostRepository::infoPost($userId, $idPost);
+        return $post;
     }
 }

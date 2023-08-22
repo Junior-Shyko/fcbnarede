@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,6 +25,7 @@ class PostRepository {
      */
     static public function addLikePost($postId): void
     {
+       
         $post = Post::find($postId);
         $post->like += 1;
         $post->save();
@@ -40,5 +42,14 @@ class PostRepository {
         $post = Post::find($postId);
         $post->like -= 1;
         $post->save();
+    }
+
+
+    static public function infoPost($userId, $postId)
+    {
+        return Like::where([
+            ['user_id' , '=',  $userId],
+            ['post_id' , '=', $postId]
+        ]);
     }
 }
