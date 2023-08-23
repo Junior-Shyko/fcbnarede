@@ -45,11 +45,12 @@ class PostRepository {
     }
 
 
-    static public function infoPost($userId, $postId)
+    static public function infoPost($userId, $postId): Like
     {
         return Like::where([
             ['user_id' , '=',  $userId],
             ['post_id' , '=', $postId]
         ]);
     }
+
 }

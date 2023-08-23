@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import api from "@/Services/server";
+import Reaction from "@/Components/FCB/Like/Reaction.vue";
 
 const state = reactive({
   posts: [],
@@ -11,11 +12,12 @@ const state = reactive({
 
 const showReaction = ref(false)
 const isLike = ref(false);
+const reloadPostRef = ref(false);
 
 const getPosts = () => {
   api.get('api/post/todos')
     .then(res => {
-      // console.log(res)
+      console.log(res)
       state.posts = res.data
      
       
@@ -31,45 +33,11 @@ state.posts.forEach((s) => {
       s.show = false
 })
 
-const likePost = (user, post) => {
-console.log(user, post)
-  const postData = {user_id: user, post_id: post}
-  api.post('api/like/add', postData)
-  .then(res => {
-    console.log(res.status)
-    if(res.status == 202){
-      console.log('Remover o like')
-      isLike = true;
-    }
-    getPosts();
-  })
-  .catch(err => {
-    console.log(err.response.data.error)
-   
-  })
+function reloadPost()
+{
+  getPosts();
 }
 
-const myLike = (postId, userId) => {
-  //userId é o usuario de quem está logado
-  console.log(postId , userId)
-  api.get('api/like/all/post/' + postId)
-  .then(res => {
-    // console.log({res})
-    res.data.forEach(element => {
-      // console.log(element)
-      if(element.user_id == userId  && element.post_id == postId)
-      {
-        console.log('Curtiu esse post: ' + element.post_id)
-        isLike.value = true;
-        state.isLike = 'Você curtiu';
-        return;
-      }
-    });
-  })
-  .catch(err => {
-
-  })
-}
 
 
 </script>
@@ -101,7 +69,7 @@ const myLike = (postId, userId) => {
           </v-card>
         </div>
         <v-card class="mt-3" v-for="(item, index) in state.posts">
-          {{  myLike(item.id, $page.props.auth.user.id) }}
+
           <v-row :key="index">
             <v-col cols="12" class="d-flex ml-2 mt-2">
               <v-avatar color="info">
@@ -121,12 +89,20 @@ const myLike = (postId, userId) => {
               </Link>
                 <v-card-actions>
                   <v-row justify="space-between">
+                   
+                      
+                      <Reaction 
+                        :user_id="$page.props.auth.user.id"
+                        :post_id="item.id"
+                        :count="item.like" 
+                        reaction="like" 
+                        @reload-posts="reloadPost" 
+                      />
+                      
+                     
+                    
                     <v-btn class="m-2">
-                      <v-icon icon="far fa-thumbs-up" @click="likePost($page.props.auth.user.id, item.id )" />
-                      <label class="ml-1 mt-1"> {{ item.like }}</label>
-                    </v-btn>
-                    <v-btn class="m-2" @click="showReaction = !showReaction">
-                      <v-icon icon="far fa-heart" />
+                      <Reaction :user_id="$page.props.auth.user.id" :post_id="item.id" reaction="heart" @reload-posts="reloadPost" />
                       <label class="ml-1 mt-1"> {{ item.heart }} </label>
                     </v-btn>
                     

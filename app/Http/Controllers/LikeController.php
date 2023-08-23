@@ -39,17 +39,21 @@ class LikeController extends Controller
                 ['user_id', $request['user_id'] ],
                 ['post_id' , $request['post_id'] ]
             ])->get();
-           
+
             if(count($isLikePost) == 0)
             {   //Cria um relação de usuario com post
                 Like::create($request->all());
                 //Altera o valor de like do post
                 PostRepository::addLikePost($request['post_id']);
                 return response()->json(['message' => 'success'], 200);
-            }
-            return response()->json(['error' => 'Já existe um like seu para esse post: ' ], 202);
+            }else{
+                PostRepository::removeLikePost($request['post_id']);
+                $isLikePost[0]->delete();
+                return response()->json(['message' => 'success'], 202);
+            }   
+            // return response()->json(['error' => 'Já existe um like seu para esse post: ' ], 202);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Ocorreu um erro inesperado: ' ], 400);
+            return response()->json(['error' => 'Ocorreu um erro inesperado: '.$e->getMessage() ], 400);
         }
     }
 
@@ -97,7 +101,6 @@ class LikeController extends Controller
                 ['post_id' , '=', $request['post_id'] ]
             ]);
             $unLike->delete();
-            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Ocorreu um erro inesperado: ' . $e->getMessage()], 400);
         }
