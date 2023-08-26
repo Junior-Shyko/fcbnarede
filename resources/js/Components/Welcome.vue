@@ -87,33 +87,15 @@ function reloadPost()
                   {{ item.description }}
                 </p>
               </Link>
-                <v-card-actions>
-                  <v-row justify="space-between">
-                   
-                      
-                      <Reaction 
+               <div class="d-flex p-3">
+                <Reaction 
                         :user_id="$page.props.auth.user.id"
                         :post_id="item.id"
                         :count="item.like" 
                         reaction="like" 
                         @reload-posts="reloadPost" 
                       />
-                      
-                     
-                    
-                    <v-btn class="m-2">
-                      <Reaction :user_id="$page.props.auth.user.id" :post_id="item.id" reaction="heart" @reload-posts="reloadPost" />
-                      <label class="ml-1 mt-1"> {{ item.heart }} </label>
-                    </v-btn>
-                    
-                    <v-btn class="m-2" title="Compartilhar">
-                      <v-icon icon="fas fa-share-nodes" /> <label class="mt-1">  </label>
-                    </v-btn>
-                  </v-row>
-                
-
-                  <v-spacer></v-spacer>
-                </v-card-actions>
+               </div>
               </v-card>
            
             </v-col>
