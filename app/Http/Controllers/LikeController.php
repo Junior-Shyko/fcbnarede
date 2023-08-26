@@ -6,6 +6,7 @@ use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
 use App\Repository\PostRepository;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreLikeRequest;
 use App\Http\Requests\UpdateLikeRequest;
 
@@ -38,17 +39,21 @@ class LikeController extends Controller
                 ['user_id', $request['user_id'] ],
                 ['post_id' , $request['post_id'] ]
             ])->get();
-           
+
             if(count($isLikePost) == 0)
             {   //Cria um relação de usuario com post
                 Like::create($request->all());
                 //Altera o valor de like do post
                 PostRepository::addLikePost($request['post_id']);
                 return response()->json(['message' => 'success'], 200);
-            }
-            return response()->json(['error' => 'Já existe um like seu para esse post: ' ], 400);
+            }else{
+                PostRepository::removeLikePost($request['post_id']);
+                $isLikePost[0]->delete();
+                return response()->json(['message' => 'success'], 202);
+            }   
+            // return response()->json(['error' => 'Já existe um like seu para esse post: ' ], 202);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Ocorreu um erro inesperado: ' ], 400);
+            return response()->json(['error' => 'Ocorreu um erro inesperado: '.$e->getMessage() ], 400);
         }
     }
 
@@ -96,9 +101,15 @@ class LikeController extends Controller
                 ['post_id' , '=', $request['post_id'] ]
             ]);
             $unLike->delete();
-            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Ocorreu um erro inesperado: ' . $e->getMessage()], 400);
         }
+    }
+
+    public function myLike($idPost)
+    {
+        $userId = 31;
+        $post = PostRepository::infoPost($userId, $idPost);
+        return $post;
     }
 }

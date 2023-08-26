@@ -2,20 +2,25 @@
 import { ref, reactive } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import api from "@/Services/server";
+import Reaction from "@/Components/FCB/Like/Reaction.vue";
 
 const state = reactive({
-  posts: []
+  posts: [],
+  isLike: ''
 })
 
 
 const showReaction = ref(false)
-
+const isLike = ref(false);
+const reloadPostRef = ref(false);
 
 const getPosts = () => {
   api.get('api/post/todos')
     .then(res => {
       console.log(res)
       state.posts = res.data
+     
+      
     })
     .catch(err => {
       console.log(err)
@@ -27,6 +32,13 @@ getPosts();
 state.posts.forEach((s) => {
       s.show = false
 })
+
+function reloadPost()
+{
+  getPosts();
+}
+
+
 
 </script>
 
@@ -57,6 +69,7 @@ state.posts.forEach((s) => {
           </v-card>
         </div>
         <v-card class="mt-3" v-for="(item, index) in state.posts">
+
           <v-row :key="index">
             <v-col cols="12" class="d-flex ml-2 mt-2">
               <v-avatar color="info">
@@ -66,32 +79,25 @@ state.posts.forEach((s) => {
                 :subtitle="`${'Publicado em: ' + item.created_at}`"></v-list-item>
             </v-col>
             <v-col cols="12">
-              <Link :href="route('post' , item.id)">
+             
               <v-card class="mx-auto">
+                <Link :href="route('post' , item.id)">
                 <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px" cover></v-img>
                 <p class="m-5">
                   {{ item.description }}
                 </p>
-                <v-card-actions>
-                  <!-- <v-row justify="space-between">
-                    <v-btn class="m-2" @click="showReaction = !showReaction">
-                      <v-icon icon="far fa-heart" />
-                      <label class="ml-1 mt-1"> {{ item.heart }} </label>
-                    </v-btn>
-                    <v-btn class="m-2">
-                      <v-icon icon="far fa-thumbs-up" @click="showReaction = !showReaction" />
-                      <label class="ml-1 mt-1"> {{ item.like }} </label>
-                    </v-btn>
-                    <v-btn class="m-2" title="Compartilhar">
-                      <v-icon icon="fas fa-share-nodes" /> <label class="mt-1">  </label>
-                    </v-btn>
-                  </v-row> -->
-                
-
-                  <v-spacer></v-spacer>
-                </v-card-actions>
+              </Link>
+               <div class="d-flex p-3">
+                <Reaction 
+                        :user_id="$page.props.auth.user.id"
+                        :post_id="item.id"
+                        :count="item.like" 
+                        reaction="like" 
+                        @reload-posts="reloadPost" 
+                      />
+               </div>
               </v-card>
-            </Link>
+           
             </v-col>
           </v-row>
         </v-card>
@@ -117,21 +123,7 @@ export default {
         title: "Aviso 03",
         value: 3,
       },
-    ],
-    niver: [
-      {
-        title: "10 - João Pedro",
-        value: 1,
-      },
-      {
-        title: "16 - William Correa",
-        value: 2,
-      },
-      {
-        title: "29 - Maria Clara",
-        value: 3,
-      },
-    ],
+    ]
   }),
 };
 </script>
