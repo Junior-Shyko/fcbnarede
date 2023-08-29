@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Heart;
+use App\Repository\HeartRepository;
+use App\Http\Requests\StoreLikeRequest;
 use App\Http\Requests\StoreHeartRequest;
 use App\Http\Requests\UpdateHeartRequest;
-use App\Models\Heart;
 
 class HeartController extends Controller
 {
@@ -27,9 +29,30 @@ class HeartController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHeartRequest $request)
+    public function store(StoreLikeRequest $request)
     {
-        //
+        try {
+            //VERIFICAÇÃO SE JA TEM REGISTRO NO BANCO
+            $isLikePost = Heart::where([
+                ['user_id', $request['user_id'] ],
+                ['post_id' , $request['post_id'] ]
+            ])->get();
+
+            if(count($isLikePost) == 0)
+            {   //Cria um relação de usuario com post
+                Heart::create($request->all());
+                //Altera o valor de like do post
+                HeartRepository::addHeartPost($request['post_id']);
+                return response()->json(['message' => 'success'], 200);
+            }else{
+                HeartRepository::removeHeartPost($request['post_id']);
+                $isLikePost[0]->delete();
+                return response()->json(['message' => 'success'], 202);
+            }   
+            // return response()->json(['error' => 'Já existe um like seu para esse post: ' ], 202);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ocorreu um erro inesperado: '.$e->getMessage() ], 400);
+        }
     }
 
     /**

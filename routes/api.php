@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HeartController;
 use App\Http\Controllers\PhoneController;
 
 /*
@@ -35,6 +36,11 @@ Route::prefix('like')->group(function () {
     Route::delete('unlike', [LikeController::class, 'destroy'])->name('unlike');
     Route::get('all/post/{id}', [LikeController::class, 'show'])->name('show');
     Route::get('my-like/{idPost}' , [LikeController::class, 'myLike'])->name('my-like');
+});
+
+Route::prefix('heart')->group(function () {
+    Route::post('add', [HeartController::class, 'store'])->name('add-heart');
+  
 });
 
 Route::prefix('phone')->group(function () {
