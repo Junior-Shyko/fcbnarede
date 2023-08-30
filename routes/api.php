@@ -40,7 +40,7 @@ Route::prefix('like')->group(function () {
 
 Route::prefix('heart')->group(function () {
     Route::post('add', [HeartController::class, 'store'])->name('add-heart');
-  
+    Route::get('all/post/{id}', [HeartController::class, 'show'])->name('show');
 });
 
 Route::prefix('phone')->group(function () {

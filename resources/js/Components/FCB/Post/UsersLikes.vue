@@ -11,7 +11,7 @@ const props = defineProps({
 <template>
 <v-row>
     <v-col cols="12" xs="12" sm="12">
-        {{ userAuth }}
+       
         <v-list-subheader>
             {{titleReaction}}
             <v-btn @click="addLike">

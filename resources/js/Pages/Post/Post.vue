@@ -13,6 +13,7 @@ const props = defineProps({
 });
 
 const usersLikes = ref([])
+const usersHeart = ref([])
 
 const userLikes = () => {
   api.get('api/like/all/post/' + props.post.id)
@@ -25,7 +26,17 @@ const userLikes = () => {
   })
 }
 
+const userHert = () => {
+  api.get('api/heart/all/post/' + props.post.id)
+  .then(res => {
+    usersHeart.value = res.data
+  })
+  .catch( err => {
+    console.log({err})
+  })
+}
 userLikes();
+userHert();
 
 </script>
 
@@ -88,7 +99,7 @@ userLikes();
         <v-col cols="12" xs="12" sm=12 md="6">
           <v-list density="compact">
             <UsersLikes
-              :usersLikes="usersLikes"
+              :usersLikes="usersHeart"
               titleReaction="Amou"
               iconReaction="fa-heart"
               colorReaction="error" 

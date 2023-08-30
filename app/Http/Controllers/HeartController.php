@@ -58,9 +58,11 @@ class HeartController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Heart $heart)
+    public function show($idPost)
     {
-        //
+        $like = Heart::where('post_id', $idPost);
+        return response()->json($like->with('user')->get());
+
     }
 
     /**
