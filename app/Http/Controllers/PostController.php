@@ -27,7 +27,7 @@ class PostController extends Controller
         // // dump($user);
         // return response()->json($likes);
 
-        $post = Post::with(['user', 'likes'])->limit(5)->get();
+        $post = Post::with(['user', 'likes', 'hearts'])->limit(5)->get();
         return response()->json($post);     
 
     }

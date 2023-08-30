@@ -2,27 +2,26 @@
 
 namespace App\Models;
 
-use App\Models\Heart;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Heart extends Model
 {
     use HasFactory;
+    
+    protected $fillable = [
+        'user_id',
+        'post_id'
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function likes()
+    public function post()
     {
-        return $this->hasMany(Like::class);
-    }
-
-    public function hearts()
-    {
-        return $this->hasMany(Heart::class);
+        return $this->belongsTo(Post::class);
     }
 
     public function users()

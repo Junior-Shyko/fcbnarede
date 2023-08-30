@@ -2,25 +2,22 @@
 import { ref, reactive } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import api from "@/Services/server";
-import Reaction from "@/Components/FCB/Like/Reaction.vue";
+import Like from "@/Components/FCB/Like/Like.vue";
+import Heart from "@/Components/FCB/Heart/Heart.vue";
 
 const state = reactive({
   posts: [],
   isLike: ''
 })
 
-
-const showReaction = ref(false)
-const isLike = ref(false);
-const reloadPostRef = ref(false);
+const likeUser = ref(false);
+const heartUser = ref(false);
 
 const getPosts = () => {
   api.get('api/post/todos')
     .then(res => {
       console.log(res)
-      state.posts = res.data
-     
-      
+      state.posts = res.data     
     })
     .catch(err => {
       console.log(err)
@@ -29,15 +26,23 @@ const getPosts = () => {
 
 getPosts();
 
-state.posts.forEach((s) => {
-      s.show = false
-})
-
 function reloadPost()
 {
-  getPosts();
+  // getPosts();
+  console.log('reload ' ,  heartUser.value)
+  likeUser.value ? likeUser.value = false : likeUser.value = true
+  heartUser.value ? heartUser.value = false : heartUser.value = true
+  
 }
 
+const like = () => {
+  console.log(iconLike)
+  if(iconLike == 'fas fa-thumbs-up'){
+    console.log('deixar de curtir')
+    iconLike.value == 'far fa-thumbs-up'
+  }
+  console.log(iconLike)
+}
 
 
 </script>
@@ -88,13 +93,36 @@ function reloadPost()
                 </p>
               </Link>
                <div class="d-flex p-3">
-                <Reaction 
-                        :user_id="$page.props.auth.user.id"
-                        :post_id="item.id"
-                        :count="item.like" 
-                        reaction="like" 
-                        @reload-posts="reloadPost" 
-                      />
+                  <div v-for="(itemLikes, indexLikes) in item.likes">
+                    <div v-if="(itemLikes.user_id == $page.props.auth.user.id)">
+                      {{ likeUser = true }}                     
+                    </div>                    
+                  </div>
+                 
+                 
+
+                    <div v-for="(itemHeart, indexHeart) in item.hearts">
+                      <div v-if="(itemHeart.user_id == $page.props.auth.user.id)">
+                        {{ heartUser = true }} 
+                      </div>
+                    </div>
+                    <v-row  class="justify-space-around">
+                      <Like
+                      :likeUser="likeUser"
+                      :post_id="item.id"
+                      :count="item.like" 
+                      reaction="like" 
+                      @reload-posts="reloadPost" 
+                    />
+                    <Heart
+                      :heartUser="heartUser"
+                      :post_id="item.id"
+                      :count="item.heart" 
+                      reaction="heart" 
+                      @reload-posts="reloadPost" 
+                    />
+                    </v-row>
+                 
                </div>
               </v-card>
            
