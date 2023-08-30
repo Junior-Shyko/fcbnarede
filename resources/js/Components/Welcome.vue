@@ -106,7 +106,7 @@ const like = () => {
                         {{ heartUser = true }} 
                       </div>
                     </div>
-                    <v-row  class="justify-space-between">
+                    <v-row  class="justify-space-around">
                       <Like
                       :likeUser="likeUser"
                       :post_id="item.id"
