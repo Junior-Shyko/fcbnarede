@@ -46,7 +46,7 @@ const likePost = (user, post) => {
         <v-divider></v-divider>
         <div  class="mb-8" >
             <Link variant="text">
-                {{ count }} amou
+                {{ count }} curtiu
             </Link>
         </div>  
     </div>
