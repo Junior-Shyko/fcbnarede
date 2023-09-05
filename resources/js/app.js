@@ -9,6 +9,8 @@ import VueMask from '@devindex/vue-mask';
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
+
+import { VDataTable } from 'vuetify/labs/VDataTable'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@fortawesome/fontawesome-free/css/all.css'
@@ -18,8 +20,9 @@ import colors from 'vuetify/lib/util/colors'
 const vuetify = createVuetify({
     components: {
         ...components,
-        ...directives
-      },
+        ...directives,
+        VDataTable
+    },
     icons: {
         defaultSet: 'fa',
         aliases,

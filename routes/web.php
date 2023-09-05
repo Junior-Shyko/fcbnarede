@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserMetaDataController;
 
 /*
@@ -28,6 +29,7 @@ Route::get('/', function () {
 
 Route::prefix('user')->group(function () {
     Route::get('editar-dados/{id}', [UserMetaDataController::class, 'edit'])->name('editar-usuario');
+    Route::get('list', [UserController::class, 'listUser'])->name('user-list');
     Route::patch('update-user/{id}', [UserMetaDataController::class, 'update'])->name('update-user');
 });
 

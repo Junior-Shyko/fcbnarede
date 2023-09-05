@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('user')->group(function () {
-    Route::get('todos', [UserController::class, 'index'])->name('todos');
+    Route::get('list', [UserController::class, 'index'])->name('todos');
 });
 
 Route::prefix('post')->group(function () {

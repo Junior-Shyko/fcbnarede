@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Repository\UserRepository;
 
@@ -31,4 +32,14 @@ class UserController extends Controller
     {
         //
     }
+
+    public function listUser()
+    {
+        $users = new UserRepository;
+        return Inertia::render('User/List', [
+            'users' => $users->getUser()
+        ]);
+    }
+
+
 }

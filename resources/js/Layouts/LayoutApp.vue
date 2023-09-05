@@ -19,8 +19,8 @@ import { Head } from '@inertiajs/vue3';
                             </v-col>
                             <v-col cols="12" sm="9">
                                 <main>
-                    <slot />
-                </main>
+                                    <slot />
+                                </main>
                             </v-col>
                         </v-row>
                         
