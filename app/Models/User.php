@@ -11,8 +11,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+// use App\Contracts\UserRepoInterface;
 
-class User extends Authenticatable
+class User extends Authenticatable 
 {
     use HasApiTokens;
     use HasFactory;
@@ -28,7 +29,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'password'
     ];
 
     /**
@@ -61,6 +62,14 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+
+    // protected $model;
+
+    // public function __construct(User $model)
+    // {
+    //     $this->model = $model;
+    // }
+
     public function userMeta(): HasOne
     {
         return $this->hasOne(UserMetaData::class);
@@ -75,4 +84,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
-}
+
+}  

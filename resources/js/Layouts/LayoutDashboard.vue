@@ -18,7 +18,7 @@
                   <v-list-item prepend-icon="fas fa-rss" title="Feed" value="inbox"
                     color="primary"
                     variant="plain"
-                    :to="route('dashboard')"
+                    :href="'../dashboard'"
                     >
                   </v-list-item>
                

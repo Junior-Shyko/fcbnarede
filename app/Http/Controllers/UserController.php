@@ -2,19 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\UserRepoInterface;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Repository\UserRepository;
 
 class UserController extends Controller
 {
+    protected $userRepo;
+
+    public function __construct(UserRepoInterface $repo)
+    {
+        $this->userRepo = $repo;
+    }
+
      /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = new UserRepository;
-        return response()->json( $users->allAndMeta() );
+        // $users = new UserRepository;
+        // return response()->json( $users->allAndMeta() );
+        $users = $this->userRepo->allAndMeta();
+
+        return $users;
     }
 
     /**
@@ -41,5 +52,10 @@ class UserController extends Controller
         ]);
     }
 
+    public function desactive($id)
+    {
+        $user = $this->userRepo->find($id);
+        return response()->json($user);
+    }
 
 }

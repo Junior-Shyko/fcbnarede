@@ -88,22 +88,31 @@ getUsers();
         </template>
         
       </v-data-table>
-      <v-dialog v-model="state.dialogDelete" max-width="500px">
+      <v-dialog v-model="state.dialogDelete" max-width="400px">
           <v-card>
-            <v-card-title class="text-h5 text-red-400" color="error">Deseja realmente fazer essa exclusão: </v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <div  class="d-flex justify-space-between">
-                <v-btn color="blue-darken-1" variant="tonal"  @click="closedDelete" >Não</v-btn>
-                <v-btn color="error" variant="tonal">Sim</v-btn>
+            <v-card-title class="text-red-darken-3">
+              EXCLUSÃO ou DESATIVAÇÃO
+            </v-card-title>
+            <v-card-text>
+              <div class="text-justify">
+                <p>
+                  <v-icon icon="fas fa-circle-info" color="error"></v-icon>
+                  A <strong>EXCLUSÃO</strong> removerá de forma definitiva o usuário e a <strong>DESATIVAÇÃO</strong> fará que o usuário não apareca na lista de membros,
+                  mas podendo ser restaurado posteriormente quando necessário.
+                </p>
+                
               </div>
-                <v-spacer></v-spacer>
-            </v-card-actions>
+            </v-card-text>
+            <v-card-actions class="justify-between">
+              <v-btn variant="tonal"  @click="closedDelete" >Desistir</v-btn>
+              <v-btn color="error" variant="outlined">Desativar</v-btn>
+              <v-btn color="error" variant="tonal">Excluir</v-btn>
+            </v-card-actions>            
           </v-card>
         </v-dialog>
     </v-sheet>
 
-  </LayoutDashboard>
+  </LayoutDashboard>1501159648
 </template>
 <script>
 export default {

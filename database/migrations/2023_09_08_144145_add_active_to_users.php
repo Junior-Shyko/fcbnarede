@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hearts', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('user_meta_data', function (Blueprint $table) {
+            $table->boolean('active')->default(true);
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hearts');
+        Schema::table('user_meta_data', function (Blueprint $table) {
+            $table->dropColumn('active');
+        });
     }
 };

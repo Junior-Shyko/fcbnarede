@@ -23,7 +23,8 @@ class UserMetaData extends Model
         'marital_status',
         'birth_date',
         'user_id',
-        'city'
+        'city',
+        'active'
     ];
 
     public function user()

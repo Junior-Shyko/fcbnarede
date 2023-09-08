@@ -19,12 +19,14 @@ use App\Http\Controllers\PhoneController;
 |
 */
 
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::prefix('user')->group(function () {
     Route::get('list', [UserController::class, 'index'])->name('todos');
+    Route::post('desactive/{id}', [UserController::class, 'desactive'])->name('user-desactive');
 });
 
 Route::prefix('post')->group(function () {

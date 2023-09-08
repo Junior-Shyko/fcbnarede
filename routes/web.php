@@ -27,9 +27,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::prefix('user')->group(function () {
+Route::prefix('usuario')->group(function () {
     Route::get('editar-dados/{id}', [UserMetaDataController::class, 'edit'])->name('editar-usuario');
-    Route::get('list', [UserController::class, 'listUser'])->name('user-list');
+    Route::get('listar', [UserController::class, 'listUser'])->name('user-list');
     Route::patch('update-user/{id}', [UserMetaDataController::class, 'update'])->name('update-user');
 });
 
