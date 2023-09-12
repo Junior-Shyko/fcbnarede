@@ -7,8 +7,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\UserMetaData;
 use App\Http\Requests\StoreUserMetaDataRequest;
-use App\Http\Requests\UpdateUserMetaDataRequest;
-
+use App\Repository\UserMetaRepository;
 
 class UserMetaDataController extends Controller
 {
@@ -91,5 +90,17 @@ class UserMetaDataController extends Controller
     public function destroy(UserMetaData $userMetaData)
     {
         //
+    }
+
+    public function desactive($id)
+    {
+        try {
+            $user = UserMetaData::where('user_id', $id)->first();
+            $meta = new UserMetaRepository($user);
+            $meta->active_desactive();
+            return response()->json(['message' => 'success'] , 200);
+        } catch (\Exception $th) {
+            return response()->json(['error' => 'Um erro inesperado aconteceu '.$th->getMessage()]);
+        }
     }
 }

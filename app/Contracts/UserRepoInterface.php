@@ -10,4 +10,5 @@ interface UserRepoInterface {
     public function find($id);
 
     public function create($data);
+    
 }

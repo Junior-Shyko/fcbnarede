@@ -19,6 +19,7 @@ class UserRepository implements  UserRepoInterface {
         $users = User::join('user_meta_data', 'users.id', '=', 'user_meta_data.user_id')
         ->select('users.*', 'user_meta_data.*')
         ->where('active', 1)
+        ->orderBy('users.id', 'desc')
         ->get();
         return $users; 
     }
@@ -46,6 +47,13 @@ class UserRepository implements  UserRepoInterface {
 
     public function create($data)
     {
+
+    }
+
+    public function updateMetaData($id, $data)
+    {
+      $user = $this->model->where('user_id', $id)->first();
+      dump($user);
 
     }
 

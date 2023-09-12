@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HeartController;
 use App\Http\Controllers\PhoneController;
+use App\Http\Controllers\UserMetaDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('user')->group(function () {
     Route::get('list', [UserController::class, 'index'])->name('todos');
-    Route::post('desactive/{id}', [UserController::class, 'desactive'])->name('user-desactive');
+    Route::post('desactive/{id}', [UserMetaDataController::class, 'desactive'])->name('user-desactive');
 });
 
 Route::prefix('post')->group(function () {

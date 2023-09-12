@@ -1,13 +1,11 @@
 <script setup>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import api from "@/Services/server";
 import moment from "moment"
-import LayoutApp from '@/Layouts/LayoutApp.vue';
+import { createToast } from 'mosha-vue-toastify';
 import LayoutDashboard from "@/Layouts/LayoutDashboard.vue";
+import 'mosha-vue-toastify/dist/style.css';
 
-const props = ref({
-  
-});
 const state = reactive({
   posts: [],
   isLike: '',
@@ -30,31 +28,60 @@ const state = reactive({
    
   ],
   search: '',
-  dialogDelete : false
-  
+  dialogDelete : false,
+  idItem: Number
 })
 
-const deleteItem = () => {
+const toast = (titToast, descToast, typeToast) => {
+  createToast({
+    title: titToast,
+    description: descToast
+  },
+    {
+      showIcon: true,
+      position: 'top-center',
+      type: typeToast,
+      transition: 'zoom',
+    })
+}
+
+const deleteItem = (item) => {
   state.dialogDelete = true
+  state.idItem = item.user_id
 }
 
 const closedDelete = () => {
   state.dialogDelete = false
 }
 
+const desactive = () => {
+  api.post('api/user/desactive/'+state.idItem)
+  .then(res => {
+    console.log({res})
+    toast('Sucesso', 'Usuário desativado', 'success')
+    getUsers()
+    state.dialogDelete = false
+    state.idItem = null;
+  })
+  .catch(err => {
+    console.log(err)
+  })
+}
+
 const getUsers = () => {
   api.get('api/user/list')
   .then( res => {
-    console.log({res})
-    console.log('desserts ', state.desserts)
     state.desserts = res.data
+   
   })
   .catch(err => {
     console.log('catch ', err)
   })
 }
 
-getUsers();
+onMounted(() => {
+  getUsers();
+})
 </script>
 <template>
   <LayoutDashboard title="Post">
@@ -100,12 +127,12 @@ getUsers();
                   A <strong>EXCLUSÃO</strong> removerá de forma definitiva o usuário e a <strong>DESATIVAÇÃO</strong> fará que o usuário não apareca na lista de membros,
                   mas podendo ser restaurado posteriormente quando necessário.
                 </p>
-                
+              {{ state.idItem }}
               </div>
             </v-card-text>
             <v-card-actions class="justify-between">
               <v-btn variant="tonal"  @click="closedDelete" >Desistir</v-btn>
-              <v-btn color="error" variant="outlined">Desativar</v-btn>
+              <v-btn color="error" variant="outlined" @click="desactive">Desativar</v-btn>
               <v-btn color="error" variant="tonal">Excluir</v-btn>
             </v-card-actions>            
           </v-card>

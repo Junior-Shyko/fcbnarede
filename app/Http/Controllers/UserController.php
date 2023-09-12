@@ -46,16 +46,9 @@ class UserController extends Controller
 
     public function listUser()
     {
-        $users = new UserRepository;
-        return Inertia::render('User/List', [
-            'users' => $users->getUser()
-        ]);
+        return Inertia::render('User/List');
     }
 
-    public function desactive($id)
-    {
-        $user = $this->userRepo->find($id);
-        return response()->json($user);
-    }
+   
 
 }
